@@ -1,3 +1,4 @@
+cat > /home/claude/smart-calendar/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,56 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#183028;
-    --ink-soft:#5b6d67;
-    --paper:#f6f4ee;
-    --card:#ffffff;
-    --green:#1f7a5c;
-    --green-deep:#12463a;
-    --green-pale:#e7f2ec;
-    --line:#e7e3d8;
-    --purple:#7c6fe0;
-    --blue:#3b82c4;
-    --amber:#e0a530;
-    --rose:#e0607a;
-    --gray:#8a8f8c;
+    --ink:#183028; --ink-soft:#5b6d67; --paper:#f6f4ee; --card:#ffffff;
+    --green:#1f7a5c; --green-deep:#12463a; --green-pale:#e7f2ec; --line:#e7e3d8;
+    --purple:#7c6fe0; --blue:#3b82c4; --amber:#e0a530; --rose:#e0607a; --gray:#8a8f8c;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Tajawal',sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Tajawal',sans-serif;-webkit-font-smoothing:antialiased;}
   a{color:inherit;text-decoration:none;}
   button{font-family:inherit;cursor:pointer;}
+  input,textarea,select{font-family:inherit;}
 
   .shell{display:flex;min-height:100vh;}
 
   /* Sidebar */
-  .sidebar{
-    width:230px;
-    flex-shrink:0;
-    padding:24px 16px;
-    border-left:1px solid var(--line);
-  }
-  .nav-item{
-    display:flex;align-items:center;gap:10px;
-    padding:11px 14px;border-radius:10px;
-    font-size:14.5px;font-weight:500;color:var(--ink-soft);
-    margin-bottom:4px;
-  }
+  .sidebar{width:230px;flex-shrink:0;padding:24px 16px;border-left:1px solid var(--line);transition:margin-right .25s ease, opacity .2s ease;}
+  .sidebar.hidden{margin-right:-230px;opacity:0;pointer-events:none;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;font-size:14.5px;font-weight:500;color:var(--ink-soft);margin-bottom:4px;border:none;background:none;width:100%;text-align:right;}
   .nav-item .dot{width:18px;text-align:center;font-size:15px;}
   .nav-item.active{background:var(--green);color:#fff;font-weight:700;}
   .nav-item:not(.active):hover{background:#efece1;}
 
-  .week-widget{
-    margin-top:22px;background:var(--card);border:1px solid var(--line);
-    border-radius:16px;padding:18px;text-align:center;
-  }
+  .week-widget{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;}
   .week-widget h4{margin:0 0 10px;font-size:13.5px;color:var(--ink-soft);display:flex;align-items:center;justify-content:space-between;}
-  .week-widget .num{font-size:38px;font-weight:800;color:var(--green-deep);line-height:1;}
+  .week-widget .num{font-size:34px;font-weight:800;color:var(--green-deep);line-height:1;}
   .week-widget .sub{font-size:12px;color:var(--gray);margin-top:6px;}
   .week-widget .dates{font-size:12.5px;color:var(--ink-soft);margin-top:4px;}
   .bar{height:6px;background:#eee;border-radius:5px;margin-top:12px;overflow:hidden;}
@@ -67,104 +41,106 @@
   /* Main */
   .main{flex:1;min-width:0;padding:26px 30px;}
   .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
-  .icon-btn{
-    width:38px;height:38px;border-radius:10px;background:var(--card);
-    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;
-  }
+  .icon-btn{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;}
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand .bolt{
-    width:34px;height:34px;background:var(--amber);border-radius:9px;
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;
-  }
+  .brand .bolt{width:34px;height:34px;background:var(--amber);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;}
   .brand h1{font-size:19px;margin:0;font-weight:800;}
   .brand p{margin:0;font-size:11.5px;color:var(--gray);}
 
   .year-row{text-align:center;margin-bottom:22px;}
   .year-row h2{font-size:22px;font-weight:800;margin:0 0 4px;display:flex;gap:8px;align-items:center;justify-content:center;}
   .year-row span{font-size:12.5px;color:var(--gray);}
-  .add-btn{
-    position:absolute;left:30px;top:26px;
-    background:var(--green-deep);color:#fff;border:none;border-radius:10px;
-    padding:11px 18px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center;
-  }
+  .add-btn{position:absolute;left:30px;top:26px;background:var(--green-deep);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center;}
 
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-  .stat-card{
-    background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:14px 16px;display:flex;align-items:center;gap:12px;
-  }
+  .stat-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
   .stat-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
   .stat-val{font-size:20px;font-weight:800;line-height:1;}
   .stat-label{font-size:12px;color:var(--gray);margin-top:5px;}
 
   .filters{display:flex;gap:10px;margin-bottom:18px;}
-  .filters .f{
-    background:var(--card);border:1px solid var(--line);border-radius:10px;
-    padding:9px 14px;font-size:13.5px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;
-  }
+  .filters .f{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:13.5px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;}
   .filters .search{flex:1;}
   .filters .search input{border:none;background:none;font-family:inherit;font-size:13.5px;width:100%;outline:none;color:var(--ink);}
 
   .content-grid{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;}
-
   .section-title{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:8px;margin:0 0 12px;}
 
-  .week-card{
-    background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:16px 18px;display:flex;align-items:center;justify-content:space-between;
-    margin-bottom:12px;position:relative;
-  }
+  .week-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;position:relative;flex-wrap:wrap;gap:10px;}
   .week-card.current{border:1.5px solid var(--green);}
-  .badge-current{
-    position:absolute;top:-11px;right:16px;background:var(--green-deep);color:#fff;
-    font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;
-  }
+  .week-card.upcoming-week{border:1.5px dashed var(--amber);}
+  .badge-current{position:absolute;top:-11px;right:16px;background:var(--green-deep);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;}
+  .badge-upcoming{position:absolute;top:-11px;right:16px;background:var(--amber);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;}
   .wc-range{font-size:11.5px;color:var(--gray);line-height:1.7;display:flex;align-items:flex-start;gap:8px;}
   .wc-range b{color:var(--ink-soft);font-weight:600;}
-  .wc-events{flex:1;margin:0 18px;}
+  .wc-events{flex:1;margin:0 18px;min-width:160px;}
   .wc-events h5{font-size:13px;margin:0 0 8px;color:var(--ink-soft);font-weight:700;}
   .wc-events ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
   .wc-events li{font-size:12.5px;display:flex;align-items:center;gap:8px;color:var(--ink);}
   .wc-events li i{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .wc-events .none{color:var(--gray);font-size:12px;}
   .wc-week{text-align:center;min-width:70px;}
   .wc-week .lbl{font-size:12px;color:var(--gray);}
   .wc-week .n{font-size:26px;font-weight:800;color:var(--green-deep);}
-  .wc-nav{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--gray);}
+  .wc-note{width:100%;margin-top:10px;}
+  .wc-note textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;font-family:inherit;resize:vertical;min-height:36px;background:#fbfaf6;}
+  .wc-note label{font-size:11.5px;color:var(--gray);display:block;margin-bottom:4px;}
 
-  .show-more{
-    display:block;margin:6px auto 0;background:var(--card);border:1px solid var(--line);
-    border-radius:10px;padding:10px 22px;font-size:13px;color:var(--ink-soft);font-weight:600;
-  }
+  .show-more{display:block;margin:6px auto 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 22px;font-size:13px;color:var(--ink-soft);font-weight:600;}
 
-  .side-card{
-    background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:16px 18px;margin-bottom:18px;
-  }
+  .side-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:18px;}
   .event-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1efe6;}
   .event-row:last-child{border-bottom:none;}
-  .event-day{width:40px;text-align:center;flex-shrink:0;}
-  .event-day .n{font-size:17px;font-weight:800;}
-  .event-day .u{font-size:10.5px;color:var(--gray);}
+  .event-day{width:44px;text-align:center;flex-shrink:0;}
+  .event-day .n{font-size:16px;font-weight:800;}
+  .event-day .u{font-size:10px;color:var(--gray);}
   .event-info{flex:1;min-width:0;}
   .event-info .t{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;}
   .event-info .t i{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
   .event-info .d{font-size:11.5px;color:var(--gray);margin-top:2px;}
-  .see-all{
-    display:block;text-align:center;margin-top:10px;background:var(--paper);
-    border:1px solid var(--line);border-radius:10px;padding:9px;font-size:13px;font-weight:600;color:var(--ink-soft);
-  }
+  .see-all{display:block;text-align:center;margin-top:10px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:9px;font-size:13px;font-weight:600;color:var(--ink-soft);}
 
   .cat-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:600;margin-bottom:6px;}
   .cat-row i{width:8px;height:8px;border-radius:50%;}
   .cat-row span{display:flex;align-items:center;gap:8px;}
+  .cat-count{background:rgba(255,255,255,.6);border-radius:20px;padding:2px 9px;font-size:11.5px;}
 
-  footer{
-    background:var(--green-deep);color:#fff;padding:16px 30px;display:flex;
-    align-items:center;justify-content:space-between;font-size:12.5px;margin-top:10px;border-radius:20px 20px 0 0;
-  }
+  footer{background:var(--green-deep);color:#fff;padding:16px 30px;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;margin-top:10px;border-radius:20px 20px 0 0;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* Monthly calendar */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .cal-head .title{font-size:17px;font-weight:800;}
+  .cal-nav{display:flex;gap:8px;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .cal-dow{text-align:center;font-size:12px;color:var(--gray);font-weight:700;padding-bottom:6px;}
+  .cal-cell{background:var(--card);border:1px solid var(--line);border-radius:10px;min-height:78px;padding:6px 8px;font-size:12px;position:relative;}
+  .cal-cell.empty{background:transparent;border-color:transparent;}
+  .cal-cell .dnum{font-weight:700;font-size:13px;}
+  .cal-cell .devt{display:block;margin-top:4px;font-size:10.5px;border-radius:5px;padding:2px 4px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cal-cell.today{border:1.5px solid var(--green);}
+
+  /* Modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(18,70,58,.35);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;}
+  .modal-overlay.active{display:flex;}
+  .modal{background:var(--card);border-radius:16px;padding:22px;max-width:420px;width:100%;}
+  .modal h3{margin:0 0 16px;font-size:16px;font-weight:800;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;font-weight:600;}
+  .field input, .field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;background:#fbfaf6;}
+  .toggle-type{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:12px;}
+  .toggle-type button{flex:1;border:none;background:#fbfaf6;padding:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .toggle-type button.on{background:var(--green);color:#fff;}
+  .converted{font-size:12px;color:var(--gray);margin-top:6px;}
+  .modal-actions{display:flex;gap:10px;margin-top:8px;}
+  .btn-primary{flex:1;background:var(--green-deep);color:#fff;border:none;border-radius:9px;padding:11px;font-weight:700;font-size:13.5px;}
+  .btn-ghost{flex:1;background:#efece1;border:none;border-radius:9px;padding:11px;font-weight:700;font-size:13.5px;color:var(--ink-soft);}
 
   @media (max-width: 980px){
-    .sidebar{display:none;}
+    .sidebar{position:fixed;right:0;top:0;bottom:0;background:var(--paper);z-index:40;box-shadow:2px 0 10px rgba(0,0,0,.08);}
+    .sidebar.hidden{margin-right:-260px;}
     .stats{grid-template-columns:repeat(2,1fr);}
     .content-grid{grid-template-columns:1fr;}
     .add-btn{position:static;margin-top:12px;}
@@ -174,193 +150,560 @@
 <body>
 
 <div class="shell">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="nav-item active"><span class="dot">🏠</span> الرئيسية</div>
-    <div class="nav-item"><span class="dot">📅</span> جميع الأسابيع</div>
-    <div class="nav-item"><span class="dot">🚩</span> الأحداث</div>
-    <div class="nav-item"><span class="dot">🗓️</span> التقويم الشهري</div>
-    <div class="nav-item"><span class="dot">🏷️</span> الفئات</div>
-    <div class="nav-item"><span class="dot">📊</span> الإحصائيات</div>
-    <div class="nav-item"><span class="dot">⚙️</span> الإعدادات</div>
+  <aside class="sidebar" id="sidebar">
+    <button class="nav-item active" data-view="home"><span class="dot">🏠</span> الرئيسية</button>
+    <button class="nav-item" data-view="weeks"><span class="dot">📅</span> جميع الأسابيع</button>
+    <button class="nav-item" data-view="events"><span class="dot">🚩</span> الأحداث</button>
+    <button class="nav-item" data-view="monthly"><span class="dot">🗓️</span> التقويم الشهري</button>
+    <button class="nav-item" data-view="categories"><span class="dot">🏷️</span> الفئات</button>
+    <button class="nav-item" data-view="stats"><span class="dot">📊</span> الإحصائيات</button>
+    <button class="nav-item" data-view="settings"><span class="dot">⚙️</span> الإعدادات</button>
 
     <div class="week-widget">
-      <h4>الأسبوع الحالي <span>📆</span></h4>
-      <div class="num" id="curWeekNum">12</div>
-      <div class="sub" id="curWeekOf">من 42 أسبوع</div>
-      <div class="dates" id="curWeekDates">15 - 21 مايو 2026</div>
-      <div class="bar"><i id="curWeekBar" style="width:29%"></i></div>
-      <div class="pct" id="curWeekPct">29%</div>
+      <h4>الأسبوع الحالي 📆</h4>
+      <div id="curWeekBody"></div>
     </div>
   </aside>
 
-  <!-- Main -->
   <main class="main" style="position:relative;">
     <div class="topbar">
       <div style="display:flex;gap:10px;">
-        <button class="icon-btn">⚙️</button>
+        <button class="icon-btn" id="sidebarToggle">☰</button>
         <button class="icon-btn">🌙</button>
         <button class="icon-btn">🔔</button>
       </div>
       <div class="brand">
-        <div>
-          <h1>التقويم الذكي</h1>
-          <p>خطط يومك، حقق طموحك</p>
-        </div>
+        <div><h1>التقويم الذكي</h1><p>خطط يومك، حقق طموحك</p></div>
         <div class="bolt">⚡</div>
       </div>
     </div>
 
     <div class="year-row">
-      <h2>السنة الدراسية 2025 - 2026 <span style="font-size:14px;">▾</span></h2>
-      <span>1448 - 1449 هـ</span>
+      <h2>السنة الدراسية 1448 - 1449 هـ</h2>
+      <span id="yearGregLabel"></span>
     </div>
-    <button class="add-btn">+ إضافة حدث</button>
+    <button class="add-btn" id="openAddEvent">+ إضافة حدث</button>
 
-    <!-- Stats -->
-    <section class="stats" id="statsRow"></section>
-
-    <!-- Filters -->
-    <div class="filters">
-      <div class="f">▾ كل الفئات 🏷️</div>
-      <div class="f search">🔍 <input placeholder="بحث عن حدث..."></div>
-      <div class="f">▾ عرض: الأسابيع 🗂️</div>
-    </div>
-
-    <div class="content-grid">
-      <!-- Weeks -->
-      <div>
-        <h3 class="section-title">📅 الأسابيع الدراسية</h3>
-        <div id="weeksList"></div>
-        <button class="show-more">▾ عرض المزيد</button>
+    <!-- HOME VIEW -->
+    <section class="view active" data-view="home">
+      <section class="stats" id="statsRow"></section>
+      <div class="filters">
+        <div class="f">▾ كل الفئات 🏷️</div>
+        <div class="f search">🔍 <input placeholder="بحث عن حدث..." id="homeSearch"></div>
+        <div class="f">▾ عرض: الأسابيع 🗂️</div>
       </div>
-
-      <!-- Sidebar right -->
-      <div>
-        <div class="side-card">
-          <h3 class="section-title">📅 الأحداث القادمة</h3>
-          <div id="upcomingList"></div>
-          <a href="#" class="see-all">عرض جميع الأحداث</a>
+      <div class="content-grid">
+        <div>
+          <h3 class="section-title">📅 الأسابيع الدراسية</h3>
+          <div id="weeksPreview"></div>
+          <button class="show-more" data-view-jump="weeks">▾ عرض المزيد</button>
         </div>
-        <div class="side-card">
-          <h3 class="section-title">🏷️ الفئات</h3>
-          <div id="catList"></div>
+        <div>
+          <div class="side-card">
+            <h3 class="section-title">📅 الأحداث القادمة</h3>
+            <div id="upcomingList"></div>
+            <a href="#" class="see-all" data-view-jump="events">عرض جميع الأحداث</a>
+          </div>
+          <div class="side-card">
+            <h3 class="section-title">🏷️ الفئات</h3>
+            <div id="catList"></div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- ALL WEEKS VIEW -->
+    <section class="view" data-view="weeks">
+      <h3 class="section-title">📅 جميع الأسابيع الدراسية (20 أسبوع)</h3>
+      <div id="allWeeksList"></div>
+    </section>
+
+    <!-- EVENTS VIEW -->
+    <section class="view" data-view="events">
+      <h3 class="section-title">🚩 كل الأحداث</h3>
+      <div class="side-card"><div id="allEventsList"></div></div>
+    </section>
+
+    <!-- MONTHLY VIEW -->
+    <section class="view" data-view="monthly">
+      <div class="cal-head">
+        <button class="icon-btn" id="prevMonth">‹</button>
+        <div class="title" id="calTitle"></div>
+        <button class="icon-btn" id="nextMonth">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </section>
+
+    <!-- CATEGORIES VIEW -->
+    <section class="view" data-view="categories">
+      <h3 class="section-title">🏷️ الفئات</h3>
+      <div class="side-card"><div id="catListFull"></div></div>
+    </section>
+
+    <!-- STATS VIEW -->
+    <section class="view" data-view="stats">
+      <h3 class="section-title">📊 الإحصائيات</h3>
+      <section class="stats" id="statsFull" style="grid-template-columns:repeat(3,1fr);"></section>
+    </section>
+
+    <!-- SETTINGS VIEW -->
+    <section class="view" data-view="settings">
+      <h3 class="section-title">⚙️ الإعدادات</h3>
+      <div class="side-card">
+        <div class="field"><label>نوع التاريخ الافتراضي عند إضافة حدث</label>
+          <select id="defaultDateType"><option value="hijri">هجري</option><option value="gregorian">ميلادي</option></select>
+        </div>
+        <p style="font-size:12.5px;color:var(--gray);">إعدادات إضافية قابلة للتوسعة لاحقًا.</p>
+      </div>
+    </section>
 
     <footer>
-      <span>قناة همة</span>
-      <span>⚡</span>
-      <span>صمم بحب لتحقيق الطموحات</span>
+      <span>قناة همة</span><span>⚡</span><span>صمم بحب لتحقيق الطموحات</span>
     </footer>
   </main>
 </div>
 
+<!-- Add Event Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>إضافة حدث جديد</h3>
+    <div class="field"><label>عنوان الحدث</label><input id="evtTitle" placeholder="مثال: بداية العام الدراسي"></div>
+    <div class="field"><label>الفئة</label>
+      <select id="evtCategory">
+        <option value="مناسبات">مناسبات</option>
+        <option value="إجازات">إجازات</option>
+        <option value="اختبارات">اختبارات</option>
+        <option value="محاضرات">محاضرات</option>
+        <option value="مهام">مهام</option>
+        <option value="تذكيرات">تذكيرات</option>
+        <option value="أخرى">أخرى</option>
+      </select>
+    </div>
+    <label style="font-size:12.5px;color:var(--ink-soft);font-weight:600;">نوع التاريخ</label>
+    <div class="toggle-type" style="margin-top:6px;">
+      <button id="typeHijri" class="on">هجري</button>
+      <button id="typeGregorian">ميلادي</button>
+    </div>
+    <div class="field" id="hijriFields">
+      <label>التاريخ الهجري (يوم / شهر / سنة)</label>
+      <div style="display:flex;gap:8px;">
+        <input id="hDay" type="number" placeholder="يوم" min="1" max="30">
+        <input id="hMonth" type="number" placeholder="شهر" min="1" max="12">
+        <input id="hYear" type="number" placeholder="سنة" min="1300" max="1500">
+      </div>
+      <div class="converted" id="convertedGreg"></div>
+    </div>
+    <div class="field" id="gregFields" style="display:none;">
+      <label>التاريخ الميلادي</label>
+      <input id="gDate" type="date">
+      <div class="converted" id="convertedHijri"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelEvent">إلغاء</button>
+      <button class="btn-primary" id="saveEvent">حفظ الحدث</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ---- Sample data (edit freely) ----
-const stats = [
-  {label:"إجمالي الأحداث", value:18, icon:"📅", bg:"#e7f2ec", color:"#1f7a5c"},
-  {label:"الأحداث القادمة", value:7, icon:"⏱️", bg:"#eef1fb", color:"#7c6fe0"},
-  {label:"المنتهية", value:4, icon:"🚩", bg:"#fbe9ec", color:"#e0607a"},
-  {label:"المكتملة", value:5, icon:"✅", bg:"#e7f2ec", color:"#1f7a5c"},
-];
+/* ============ Hijri <-> Gregorian conversion (tabular / approximate) ============ */
+function gToJDN(y,m,d){
+  return Math.floor((1461*(y+4800+Math.floor((m-14)/12)))/4)
+    + Math.floor((367*(m-2-12*Math.floor((m-14)/12)))/12)
+    - Math.floor((3*Math.floor((y+4900+Math.floor((m-14)/12))/100))/4)
+    + d - 32075;
+}
+function jdnToG(jdn){
+  let l = jdn + 68569;
+  const n = Math.floor((4*l)/146097);
+  l = l - Math.floor((146097*n+3)/4);
+  const i = Math.floor((4000*(l+1))/1461001);
+  l = l - Math.floor((1461*i)/4) + 31;
+  const j = Math.floor((80*l)/2447);
+  const day = l - Math.floor((2447*j)/80);
+  l = Math.floor(j/11);
+  const month = j + 2 - 12*l;
+  const year = 100*(n-49) + i + l;
+  return {year, month, day};
+}
+function hToJDN(y,m,d){
+  return Math.floor((11*y+3)/30) + 354*y + 30*m - Math.floor((m-1)/2) + d + 1948440 - 385;
+}
+function jdnToH(jdn){
+  let l = jdn - 1948440 + 10632;
+  const n = Math.floor((l-1)/10631);
+  l = l - 10631*n + 354;
+  const j = Math.floor((10985-l)/5316)*Math.floor((50*l)/17719) + Math.floor(l/5670)*Math.floor((43*l)/15238);
+  l = l - Math.floor((30-j)/15)*Math.floor((17719*j)/50) - Math.floor(j/16)*Math.floor((15238*j)/43) + 29;
+  const month = Math.floor((24*l)/709);
+  const day = l - Math.floor((709*month)/24);
+  const year = 30*n + j - 30;
+  return {year, month, day};
+}
+function hijriToGregorian(y,m,d){ return jdnToG(hToJDN(y,m,d)); }
+function gregorianToHijri(y,m,d){ return jdnToH(gToJDN(y,m,d)); }
+function toDate(y,m,d){ return new Date(y, m-1, d); }
+function fmtG(y,m,d){ return `${d}/${m}/${y}م`; }
+function fmtH(y,m,d){ return `${d}/${m}/${y}هـ`; }
 
-const categories = [
-  {name:"اختبارات", color:"#7c6fe0", bg:"#f1eefc"},
-  {name:"محاضرات", color:"#3b82c4", bg:"#e9f2fb"},
-  {name:"مهام", color:"#1f7a5c", bg:"#e7f2ec"},
-  {name:"إجازات", color:"#e0a530", bg:"#fbf2e2"},
-  {name:"مناسبات", color:"#e0607a", bg:"#fbe9ec"},
-  {name:"تذكيرات", color:"#e0a530", bg:"#fbf2e2"},
-  {name:"أخرى", color:"#8a8f8c", bg:"#efece7"},
-];
+const dowNames = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+const gMonthNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
 
-const weeks = [
-  {num:12, current:true, from:"2026 مايو 15", fromDay:"الجمعة", to:"2026 مايو 21", toDay:"السبت",
-   events:[{t:"اختبار الكيمياء العضوية", c:"#7c6fe0"},{t:"تسليم مشروع البحث", c:"#1f7a5c"},{t:"محاضرة guest lecture", c:"#3b82c4"}]},
-  {num:13, current:false, from:"2026 مايو 15", fromDay:"الجمعة", to:"2026 مايو 28", toDay:"السبت",
-   events:[{t:"اختبار الفيزياء", c:"#7c6fe0"},{t:"اجتماع الفريق", c:"#1f7a5c"}]},
-  {num:14, current:false, from:"2026 مايو 29", fromDay:"الجمعة", to:"2026 يونيو 4", toDay:"السبت",
-   events:[{t:"تسليم تقرير مختبر", c:"#1f7a5c"},{t:"إجازة نهاية الأسبوع", c:"#e0a530"}]},
-  {num:15, current:false, from:"2026 يونيو 5", fromDay:"الجمعة", to:"2026 يونيو 11", toDay:"السبت",
-   events:[{t:"اختبار الأحياء", c:"#7c6fe0"}]},
-];
+/* ============ Data (only what the user specified) ============ */
+const catStyle = {
+  "مناسبات": {color:"#e0607a", bg:"#fbe9ec"},
+  "إجازات": {color:"#e0a530", bg:"#fbf2e2"},
+  "اختبارات": {color:"#7c6fe0", bg:"#f1eefc"},
+  "محاضرات": {color:"#3b82c4", bg:"#e9f2fb"},
+  "مهام": {color:"#1f7a5c", bg:"#e7f2ec"},
+  "تذكيرات": {color:"#e0a530", bg:"#fbf2e2"},
+  "أخرى": {color:"#8a8f8c", bg:"#efece7"},
+};
 
-const upcoming = [
-  {day:9, unit:"أيام", title:"تسليم مشروع البحث", date:"21 مايو 2026 - الأحد", color:"#1f7a5c"},
-  {day:6, unit:"أيام", title:"اختبار الكيمياء العضوية", date:"21 مايو 2026 - الخميس", color:"#7c6fe0"},
-  {day:11, unit:"يوم", title:"محاضرة guest lecture", date:"23 مايو 2026 - الثلاثاء", color:"#3b82c4"},
-  {day:12, unit:"يوم", title:"اختبار الفيزياء", date:"27 مايو 2026 - الأربعاء", color:"#7c6fe0"},
-  {day:15, unit:"يوم", title:"اجتماع الفريق", date:"30 مايو 2026 - السبت", color:"#1f7a5c"},
-];
+// Academic year start: Hijri 10/3/1448 = Gregorian 23/8/2026 (given)
+const yearStart = toDate(2026,8,23);
+const TOTAL_WEEKS = 20;
 
-// ---- Render ----
+// Events strictly as provided by the user
+let events = [
+  { title:"بداية العام الدراسي", category:"مناسبات",
+    start:{y:2026,m:8,d:23}, end:{y:2026,m:8,d:23},
+    startH:{y:1448,m:3,d:10}, endH:{y:1448,m:3,d:10} },
+  { title:"إجازة اليوم الوطني", category:"إجازات",
+    start:{y:2026,m:9,d:23}, end:{y:2026,m:9,d:26},
+    startH:{y:1448,m:4,d:12}, endH:{y:1448,m:4,d:15} },
+  { title:"إجازة الخريف", category:"إجازات",
+    start:{y:2026,m:11,d:20}, end:{y:2026,m:11,d:28},
+    startH:{y:1448,m:6,d:10}, endH:{y:1448,m:6,d:18} },
+  { title:"إجازة منتصف العام الدراسي", category:"إجازات",
+    start:{y:2027,m:1,d:8}, end:{y:2027,m:1,d:16},
+    startH:{y:1448,m:7,d:30}, endH:{y:1448,m:8,d:8} },
+];
+// Load any user-added events from localStorage
+try{
+  const saved = JSON.parse(localStorage.getItem('sc-events')||'[]');
+  events = events.concat(saved);
+}catch(e){}
+
+function saveUserEvents(){
+  // persist only events beyond the original 4 fixed ones
+  const userAdded = events.slice(4);
+  localStorage.setItem('sc-events', JSON.stringify(userAdded));
+}
+
+/* ============ Weeks (20 weeks, 7 days each, starting at yearStart) ============ */
+const weeks = [];
+for(let i=0;i<TOTAL_WEEKS;i++){
+  const s = new Date(yearStart); s.setDate(s.getDate()+i*7);
+  const e = new Date(s); e.setDate(e.getDate()+6);
+  weeks.push({num:i+1, start:s, end:e});
+}
+const yearEnd = weeks[weeks.length-1].end;
+
+document.getElementById('yearGregLabel').textContent =
+  `${yearStart.getDate()}/${yearStart.getMonth()+1}/${yearStart.getFullYear()} م — ${yearEnd.getDate()}/${yearEnd.getMonth()+1}/${yearEnd.getFullYear()} م  •  20 أسبوعًا دراسيًا`;
+
+function eventDateRange(evt){
+  return { s: toDate(evt.start.y,evt.start.m,evt.start.d), e: toDate(evt.end.y,evt.end.m,evt.end.d) };
+}
+function eventsInRange(rangeStart, rangeEnd){
+  return events.filter(evt=>{
+    const {s,e} = eventDateRange(evt);
+    return s <= rangeEnd && e >= rangeStart;
+  });
+}
+function fmtDay(d){ return `${dowNames[d.getDay()]} ${d.getDate()} ${gMonthNames[d.getMonth()]} ${d.getFullYear()}`; }
+
+/* ============ Today / current week ============ */
+const today = new Date(2026,7,12); // fixed "today" reference (12 Aug 2026)
+
+function getCurrentWeekIndex(){
+  if(today < yearStart) return -1; // not started yet
+  if(today > yearEnd) return -2; // finished
+  for(let w of weeks){ if(today>=w.start && today<=w.end) return w.num-1; }
+  return -1;
+}
+
+function renderCurrentWeekWidget(){
+  const idx = getCurrentWeekIndex();
+  const el = document.getElementById('curWeekBody');
+  if(idx === -1){
+    const days = Math.ceil((yearStart-today)/86400000);
+    el.innerHTML = `<div class="num" style="font-size:20px;">لم يبدأ بعد</div>
+      <div class="sub">يبدأ العام بعد ${days} يوم</div>
+      <div class="dates">${yearStart.getDate()}/${yearStart.getMonth()+1}/${yearStart.getFullYear()}م</div>`;
+    return;
+  }
+  if(idx === -2){
+    el.innerHTML = `<div class="num" style="font-size:20px;">انتهى العام</div>`;
+    return;
+  }
+  const w = weeks[idx];
+  const pct = Math.round(((idx+1)/TOTAL_WEEKS)*100);
+  el.innerHTML = `
+    <div class="num">${w.num}</div>
+    <div class="sub">من ${TOTAL_WEEKS} أسبوع</div>
+    <div class="dates">${w.start.getDate()}/${w.start.getMonth()+1} - ${w.end.getDate()}/${w.end.getMonth()+1}/${w.end.getFullYear()}</div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="pct">${pct}%</div>`;
+}
+
+/* ============ Stats ============ */
+function computeStats(){
+  const total = events.length;
+  const upcoming = events.filter(e=>eventDateRange(e).s >= today).length;
+  const byCat = {};
+  events.forEach(e=>{ byCat[e.category] = (byCat[e.category]||0)+1; });
+  return {total, upcoming, byCat};
+}
 function renderStats(){
-  const el = document.getElementById('statsRow');
-  el.innerHTML = stats.map(s => `
+  const st = computeStats();
+  const cards = [
+    {label:"إجمالي الأحداث", value:st.total, icon:"📅", bg:"#e7f2ec", color:"#1f7a5c"},
+    {label:"الأحداث القادمة", value:st.upcoming, icon:"⏱️", bg:"#eef1fb", color:"#7c6fe0"},
+    {label:"الإجازات", value: st.byCat["إجازات"]||0, icon:"🏖️", bg:"#fbf2e2", color:"#e0a530"},
+    {label:"المناسبات", value: st.byCat["مناسبات"]||0, icon:"🎉", bg:"#fbe9ec", color:"#e0607a"},
+  ];
+  const html = cards.map(s=>`
     <div class="stat-card">
       <div class="stat-icon" style="background:${s.bg};color:${s.color}">${s.icon}</div>
-      <div>
-        <div class="stat-val">${s.value}</div>
-        <div class="stat-label">${s.label}</div>
-      </div>
+      <div><div class="stat-val">${s.value}</div><div class="stat-label">${s.label}</div></div>
+    </div>`).join('');
+  document.getElementById('statsRow').innerHTML = html;
+
+  // full stats view: events, tasks, holidays, and per-category breakdown
+  const allCats = Object.keys(catStyle);
+  const fullCards = [
+    {label:"إجمالي الأحداث", value:st.total, icon:"📅", bg:"#e7f2ec", color:"#1f7a5c"},
+    {label:"المهام", value: st.byCat["مهام"]||0, icon:"✅", bg:"#e7f2ec", color:"#1f7a5c"},
+    {label:"الإجازات", value: st.byCat["إجازات"]||0, icon:"🏖️", bg:"#fbf2e2", color:"#e0a530"},
+  ].concat(allCats.filter(c=>!["مهام","إجازات"].includes(c)).map(c=>({
+    label:c, value: st.byCat[c]||0, icon:"🏷️", bg:catStyle[c].bg, color:catStyle[c].color
+  })));
+  document.getElementById('statsFull').innerHTML = fullCards.map(s=>`
+    <div class="stat-card">
+      <div class="stat-icon" style="background:${s.bg};color:${s.color}">${s.icon}</div>
+      <div><div class="stat-val">${s.value}</div><div class="stat-label">${s.label}</div></div>
     </div>`).join('');
 }
 
-function renderWeeks(){
-  const el = document.getElementById('weeksList');
-  el.innerHTML = weeks.map(w => `
-    <div class="week-card ${w.current ? 'current' : ''}">
-      ${w.current ? '<span class="badge-current">الحالي</span>' : ''}
-      <div class="wc-range">
-        📅
+/* ============ Weeks rendering (home preview + full list w/ notes) ============ */
+function weekCardHTML(w, forFull){
+  const idx = getCurrentWeekIndex();
+  const isCurrent = idx === w.num-1;
+  const isUpcoming = !isCurrent && today < w.start && (idx===-1 ? w.num===1 : w.num===idx+2);
+  const evs = eventsInRange(w.start, w.end);
+  const noteKey = `sc-note-${w.num}`;
+  const noteVal = localStorage.getItem(noteKey) || '';
+  return `
+    <div class="week-card ${isCurrent?'current':''} ${isUpcoming?'upcoming-week':''}">
+      ${isCurrent?'<span class="badge-current">الحالي</span>':''}
+      ${isUpcoming?'<span class="badge-upcoming">القادم</span>':''}
+      <div class="wc-range">📅
         <div>
-          <div>من الأحد<br><b>${w.from}</b></div>
-          <div style="margin-top:4px;">إلى ${w.toDay}<br><b>${w.to}</b></div>
+          <div>من ${dowNames[w.start.getDay()]}<br><b>${w.start.getDate()}/${w.start.getMonth()+1}/${w.start.getFullYear()}</b></div>
+          <div style="margin-top:4px;">إلى ${dowNames[w.end.getDay()]}<br><b>${w.end.getDate()}/${w.end.getMonth()+1}/${w.end.getFullYear()}</b></div>
         </div>
       </div>
       <div class="wc-events">
-        <h5>أهم الأحداث (${w.events.length})</h5>
-        <ul>
-          ${w.events.map(e => `<li><i style="background:${e.c}"></i> ${e.t}</li>`).join('')}
-        </ul>
+        <h5>أهم الأحداث (${evs.length})</h5>
+        <ul>${evs.length? evs.map(e=>`<li><i style="background:${catStyle[e.category].color}"></i> ${e.title}</li>`).join('') : '<li class="none">لا يوجد أحداث</li>'}</ul>
+        ${forFull? `<div class="wc-note"><label>ملاحظة</label><textarea data-week="${w.num}" placeholder="أضف ملاحظة لهذا الأسبوع...">${noteVal}</textarea></div>` : ''}
       </div>
-      <div class="wc-week">
-        <div class="lbl">الأسبوع</div>
-        <div class="n">${w.num}</div>
-      </div>
-      <div class="wc-nav">‹ ›</div>
-    </div>`).join('');
+      <div class="wc-week"><div class="lbl">الأسبوع</div><div class="n">${w.num}</div></div>
+    </div>`;
 }
 
+function renderWeeks(){
+  document.getElementById('weeksPreview').innerHTML = weeks.slice(0,4).map(w=>weekCardHTML(w,false)).join('');
+  const full = document.getElementById('allWeeksList');
+  full.innerHTML = weeks.map(w=>weekCardHTML(w,true)).join('');
+  full.querySelectorAll('textarea[data-week]').forEach(ta=>{
+    ta.addEventListener('input', e=>{
+      localStorage.setItem(`sc-note-${e.target.dataset.week}`, e.target.value);
+    });
+  });
+}
+
+/* ============ Upcoming + Events list ============ */
 function renderUpcoming(){
-  const el = document.getElementById('upcomingList');
-  el.innerHTML = upcoming.map(u => `
-    <div class="event-row">
-      <div class="event-day"><div class="n">${u.day}</div><div class="u">${u.unit}</div></div>
+  const list = events
+    .map(e=>({...e, s: eventDateRange(e).s}))
+    .filter(e=>e.s >= today)
+    .sort((a,b)=>a.s-b.s);
+  document.getElementById('upcomingList').innerHTML = list.map(e=>{
+    const days = Math.ceil((e.s-today)/86400000);
+    return `<div class="event-row">
+      <div class="event-day"><div class="n">${days}</div><div class="u">${days===1?'يوم':'أيام'}</div></div>
       <div class="event-info">
-        <div class="t"><i style="background:${u.color}"></i> ${u.title}</div>
-        <div class="d">${u.date}</div>
+        <div class="t"><i style="background:${catStyle[e.category].color}"></i> ${e.title}</div>
+        <div class="d">${fmtDay(e.s)}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('') || '<p style="font-size:13px;color:var(--gray);">لا يوجد أحداث قادمة</p>';
 }
 
+function renderAllEvents(){
+  const sorted = [...events].sort((a,b)=>eventDateRange(a).s - eventDateRange(b).s);
+  document.getElementById('allEventsList').innerHTML = sorted.map(e=>{
+    const {s,end} = {s:eventDateRange(e).s, end:eventDateRange(e).e};
+    const sameDay = s.getTime()===end.getTime();
+    return `<div class="event-row">
+      <div class="event-info">
+        <div class="t"><i style="background:${catStyle[e.category].color}"></i> ${e.title} <span style="font-weight:400;color:var(--gray);font-size:11px;">(${e.category})</span></div>
+        <div class="d">${sameDay? fmtDay(s) : fmtDay(s)+' → '+fmtDay(end)}</div>
+        <div class="d">هـ: ${fmtH(e.startH.y,e.startH.m,e.startH.d)}${sameDay?'':' → '+fmtH(e.endH.y,e.endH.m,e.endH.d)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ============ Categories ============ */
 function renderCategories(){
-  const el = document.getElementById('catList');
-  el.innerHTML = categories.map(c => `
-    <div class="cat-row" style="background:${c.bg};color:${c.color}">
-      <span>${c.name}</span>
-      <i style="background:${c.color}"></i>
+  const st = computeStats();
+  const html = Object.keys(catStyle).map(c=>`
+    <div class="cat-row" style="background:${catStyle[c].bg};color:${catStyle[c].color}">
+      <span><i style="background:${catStyle[c].color}"></i> ${c}</span>
+      <span class="cat-count">${st.byCat[c]||0}</span>
     </div>`).join('');
+  document.getElementById('catList').innerHTML = html;
+  document.getElementById('catListFull').innerHTML = html;
 }
 
-renderStats();
-renderWeeks();
-renderUpcoming();
-renderCategories();
-</script>
+/* ============ Monthly calendar ============ */
+let calYear = 2026, calMonth = 8; // August 2026 (1-indexed month)
+function renderCalendar(){
+  document.getElementById('calTitle').textContent = `${gMonthNames[calMonth-1]} ${calYear}`;
+  const firstDay = new Date(calYear, calMonth-1, 1);
+  const daysInMonth = new Date(calYear, calMonth, 0).getDate();
+  const startOffset = firstDay.getDay(); // 0=Sunday
+  let html = dowNames.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<startOffset;i++) html += `<div class="cal-cell empty"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const cellDate = new Date(calYear, calMonth-1, d);
+    const isToday = cellDate.toDateString() === today.toDateString();
+    const evs = events.filter(e=>{
+      const {s,e:end} = eventDateRange(e);
+      return cellDate>=s && cellDate<=end;
+    });
+    html += `<div class="cal-cell ${isToday?'today':''}">
+      <div class="dnum">${d}</div>
+      ${evs.map(e=>`<span class="devt" style="background:${catStyle[e.category].color}">${e.title}</span>`).join('')}
+    </div>`;
+  }
+  document.getElementById('calGrid').innerHTML = html;
+}
+document.getElementById('prevMonth').addEventListener('click', ()=>{
+  calMonth--; if(calMonth<1){calMonth=12; calYear--;} renderCalendar();
+});
+document.getElementById('nextMonth').addEventListener('click', ()=>{
+  calMonth++; if(calMonth>12){calMonth=1; calYear++;} renderCalendar();
+});
 
+/* ============ View switching ============ */
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v=> v.classList.toggle('active', v.dataset.view===name));
+  document.querySelectorAll('.nav-item').forEach(n=> n.classList.toggle('active', n.dataset.view===name));
+}
+document.querySelectorAll('.nav-item[data-view]').forEach(btn=>{
+  btn.addEventListener('click', ()=> switchView(btn.dataset.view));
+});
+document.querySelectorAll('[data-view-jump]').forEach(el=>{
+  el.addEventListener('click', (e)=>{ e.preventDefault(); switchView(el.dataset.viewJump); });
+});
+
+/* ============ Sidebar toggle ============ */
+document.getElementById('sidebarToggle').addEventListener('click', ()=>{
+  document.getElementById('sidebar').classList.toggle('hidden');
+});
+
+/* ============ Add Event modal ============ */
+const overlay = document.getElementById('modalOverlay');
+document.getElementById('openAddEvent').addEventListener('click', ()=> overlay.classList.add('active'));
+document.getElementById('cancelEvent').addEventListener('click', ()=> overlay.classList.remove('active'));
+
+let dateType = 'hijri';
+document.getElementById('typeHijri').addEventListener('click', ()=>{
+  dateType='hijri';
+  document.getElementById('typeHijri').classList.add('on');
+  document.getElementById('typeGregorian').classList.remove('on');
+  document.getElementById('hijriFields').style.display='block';
+  document.getElementById('gregFields').style.display='none';
+});
+document.getElementById('typeGregorian').addEventListener('click', ()=>{
+  dateType='gregorian';
+  document.getElementById('typeGregorian').classList.add('on');
+  document.getElementById('typeHijri').classList.remove('on');
+  document.getElementById('gregFields').style.display='block';
+  document.getElementById('hijriFields').style.display='none';
+});
+['hDay','hMonth','hYear'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    const d=+document.getElementById('hDay').value, m=+document.getElementById('hMonth').value, y=+document.getElementById('hYear').value;
+    if(d&&m&&y){
+      const g = hijriToGregorian(y,m,d);
+      document.getElementById('convertedGreg').textContent = `يوافق: ${fmtG(g.year,g.month,g.day)} (تقريبي)`;
+    }
+  });
+});
+document.getElementById('gDate').addEventListener('input', (e)=>{
+  const val = e.target.value;
+  if(val){
+    const [y,m,d] = val.split('-').map(Number);
+    const h = gregorianToHijri(y,m,d);
+    document.getElementById('convertedHijri').textContent = `يوافق: ${fmtH(h.year,h.month,h.day)} (تقريبي)`;
+  }
+});
+
+document.getElementById('saveEvent').addEventListener('click', ()=>{
+  const title = document.getElementById('evtTitle').value.trim();
+  const category = document.getElementById('evtCategory').value;
+  if(!title){ alert('الرجاء إدخال عنوان الحدث'); return; }
+  let gY,gM,gD,hY,hM,hD;
+  if(dateType==='hijri'){
+    hD=+document.getElementById('hDay').value; hM=+document.getElementById('hMonth').value; hY=+document.getElementById('hYear').value;
+    if(!hD||!hM||!hY){ alert('الرجاء إدخال التاريخ الهجري كاملًا'); return; }
+    const g = hijriToGregorian(hY,hM,hD); gY=g.year; gM=g.month; gD=g.day;
+  } else {
+    const val = document.getElementById('gDate').value;
+    if(!val){ alert('الرجاء اختيار التاريخ الميلادي'); return; }
+    [gY,gM,gD] = val.split('-').map(Number);
+    const h = gregorianToHijri(gY,gM,gD); hY=h.year; hM=h.month; hD=h.day;
+  }
+  events.push({
+    title, category,
+    start:{y:gY,m:gM,d:gD}, end:{y:gY,m:gM,d:gD},
+    startH:{y:hY,m:hM,d:hD}, endH:{y:hY,m:hM,d:hD}
+  });
+  saveUserEvents();
+  overlay.classList.remove('active');
+  document.getElementById('evtTitle').value='';
+  refreshAll();
+});
+
+/* ============ Home search (client-side filter of upcoming list) ============ */
+document.getElementById('homeSearch').addEventListener('input', (e)=>{
+  const q = e.target.value.trim();
+  const rows = document.querySelectorAll('#upcomingList .event-row');
+  rows.forEach(r=>{
+    const txt = r.querySelector('.t').textContent;
+    r.style.display = txt.includes(q) ? 'flex' : 'none';
+  });
+});
+
+/* ============ Init ============ */
+function refreshAll(){
+  renderStats();
+  renderCurrentWeekWidget();
+  renderWeeks();
+  renderUpcoming();
+  renderAllEvents();
+  renderCategories();
+  renderCalendar();
+}
+refreshAll();
+</script>
 </body>
 </html>
+HTMLEOF
+echo "written"
