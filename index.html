@@ -49,9 +49,9 @@
   /* Main */
   .main{padding:22px 20px;max-width:1180px;margin:0 auto;}
   .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap;}
-  .brand{display:flex;align-items:center;gap:10px;}
-  .brand .bolt{width:34px;height:34px;background:var(--amber);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;flex-shrink:0;}
-  .brand h1{font-size:18px;margin:0;font-weight:800;}
+  .brand{display:inline-flex;flex-direction:column;align-items:center;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+  .brand h1{font-size:18px;margin:0;font-weight:800;color:var(--green-deep);display:flex;align-items:center;gap:6px;}
+  .brand h1 .bolt-ic{color:var(--amber);font-size:16px;}
   .brand p{margin:0;font-size:11.5px;color:var(--gray);}
   .add-btn{background:var(--green-deep);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-weight:700;font-size:13.5px;display:flex;gap:8px;align-items:center;white-space:nowrap;}
 
@@ -86,7 +86,6 @@
   .wc-events li{font-size:12.5px;display:flex;align-items:center;gap:8px;color:var(--ink);}
   .wc-events li i{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
   .wc-events .none{color:var(--gray);font-size:12px;}
-  .week-card.compact .wc-events ul, .week-card.compact .wc-note{display:none;}
   .wc-week{text-align:center;min-width:70px;}
   .wc-week .lbl{font-size:12px;color:var(--gray);}
   .wc-week .n{font-size:26px;font-weight:800;color:var(--green-deep);}
@@ -130,12 +129,32 @@
   .view.active{display:block;}
 
   /* Task list */
-  .task-add{display:flex;gap:8px;margin-bottom:14px;}
-  .task-add input{flex:1;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;background:var(--paper);color:var(--ink);}
+  .task-add{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .task-add input{flex:1;min-width:140px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;background:var(--paper);color:var(--ink);}
+  .task-add select{border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13px;background:var(--paper);color:var(--ink);}
   .task-add button{background:var(--green-deep);color:#fff;border:none;border-radius:9px;padding:0 16px;font-weight:700;font-size:13.5px;}
+  .priority-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;}
+  .priority-high{background:#fbe9ec;color:#c9506e;}
+  .priority-medium{background:#fbf2e2;color:#e0a530;}
+  .priority-low{background:#e9f2fb;color:#3b82c4;}
+  .task-row{border-right:4px solid transparent;padding-right:10px;}
+  .task-row.p-high{border-right-color:#c9506e;}
+  .task-row.p-medium{border-right-color:#e0a530;}
+  .task-row.p-low{border-right-color:#3b82c4;}
+  .mini-task-row{border-right:3px solid transparent;padding-right:8px;}
+  .mini-task-row.p-high{border-right-color:#c9506e;}
+  .mini-task-row.p-medium{border-right-color:#e0a530;}
+  .mini-task-row.p-low{border-right-color:#3b82c4;}
+  .mini-task-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+  .mini-task-row:last-child{border-bottom:none;}
+  .mini-task-row .mtt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mini-task-row.done .mtt{text-decoration:line-through;color:var(--gray);}
   .task-row{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);}
   .task-row:last-child{border-bottom:none;}
-  .task-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);}
+  .task-row input[type=checkbox]{width:18px;height:18px;}
+  .task-row.p-high input[type=checkbox]{accent-color:#c9506e;}
+  .task-row.p-medium input[type=checkbox]{accent-color:#e0a530;}
+  .task-row.p-low input[type=checkbox]{accent-color:#3b82c4;}
   .task-row .tt{flex:1;font-size:13.5px;}
   .task-row.done .tt{text-decoration:line-through;color:var(--gray);}
   .task-del{background:none;border:none;color:var(--rose);font-size:16px;}
@@ -205,10 +224,10 @@
 <aside class="sidebar" id="sidebar">
   <button class="nav-item active" data-view="home"><span class="dot">🏠</span> الرئيسية</button>
   <button class="nav-item" data-view="weeks"><span class="dot">📅</span> جميع الأسابيع</button>
-  <button class="nav-item" data-view="events"><span class="dot">🚩</span> الأحداث</button>
-  <button class="nav-item" data-view="tasks"><span class="dot">✅</span> المهام</button>
   <button class="nav-item" data-view="monthly"><span class="dot">🗓️</span> التقويم الشهري</button>
+  <button class="nav-item" data-view="events"><span class="dot">🚩</span> الأحداث</button>
   <button class="nav-item" data-view="categories"><span class="dot">🏷️</span> الفئات</button>
+  <button class="nav-item" data-view="tasks"><span class="dot">✅</span> المهام</button>
   <button class="nav-item" data-view="stats"><span class="dot">📊</span> الإحصائيات</button>
   <button class="nav-item" data-view="settings"><span class="dot">⚙️</span> الإعدادات</button>
 </aside>
@@ -217,8 +236,8 @@
   <main class="main">
     <div class="topbar">
       <div class="brand">
-        <div class="bolt">⚡</div>
-        <div><h1>التقويم الذكي</h1><p>خطط يومك، حقق طموحك</p></div>
+        <h1>التقويم الذكي <span class="bolt-ic">⚡</span></h1>
+        <p>خطط يومك، حقق طموحك</p>
       </div>
       <button class="add-btn" id="openAddEvent">+ إضافة حدث</button>
     </div>
@@ -233,14 +252,13 @@
       <section class="stats" id="statsRow"></section>
       <div class="filters">
         <select id="catFilter"><option value="all">كل الفئات</option></select>
-        <select id="viewFilter"><option value="cards">عرض: الأسابيع (بطاقات)</option><option value="compact">عرض: الأسابيع (قائمة)</option></select>
         <div class="search">🔍 <input placeholder="بحث عن حدث..." id="homeSearch"></div>
       </div>
       <div class="content-grid">
         <div>
           <h3 class="section-title">📅 الأسابيع الدراسية</h3>
           <div id="weeksPreview"></div>
-          <button class="show-more" data-view-jump="weeks">▾ عرض المزيد</button>
+          <button class="show-more" id="showMoreWeeksBtn">▾ عرض المزيد</button>
         </div>
         <div>
           <div class="side-card curweek-card">
@@ -255,6 +273,11 @@
           <div class="side-card">
             <h3 class="section-title">🏷️ الفئات</h3>
             <div id="catList"></div>
+          </div>
+          <div class="side-card">
+            <h3 class="section-title">✅ أهم المهام</h3>
+            <div id="topTasksList"></div>
+            <a href="#" class="see-all" data-view-jump="tasks">عرض كل المهام</a>
           </div>
         </div>
       </div>
@@ -278,6 +301,11 @@
       <div class="side-card">
         <div class="task-add">
           <input id="newTaskInput" placeholder="أضف مهمة جديدة...">
+          <select id="newTaskPriority">
+            <option value="high">أولوية عالية</option>
+            <option value="medium" selected>أولوية متوسطة</option>
+            <option value="low">أولوية منخفضة</option>
+          </select>
           <button id="addTaskBtn">إضافة</button>
         </div>
         <div id="taskList"></div>
@@ -313,8 +341,8 @@
         <div class="settings-section">
           <h4>التقويم</h4>
           <div class="field">
-            <label>نوع التاريخ الافتراضي</label>
-            <select id="dateModeSelect"><option value="hijri">هجري</option><option value="gregorian">ميلادي</option></select>
+            <label>نوع التاريخ المعروض</label>
+            <select id="dateModeSelect"><option value="gregorian">ميلادي</option><option value="hijri">هجري</option></select>
           </div>
         </div>
         <div class="settings-section">
@@ -347,14 +375,14 @@
   </main>
 
   <footer class="site-footer">
-    <span>التقويم الذكي  </span>
+    <span>التقويم الذكي © 2026 — جميع الحقوق محفوظة</span>
   </footer>
 </div>
 
 <!-- Add Event Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <h3>إضافة حدث جديد</h3>
+    <h3 id="modalTitle">إضافة حدث جديد</h3>
     <div class="field"><label>عنوان الحدث</label><input id="evtTitle" placeholder="مثال: اجتماع الفريق"></div>
     <div class="field"><label>الفئة</label>
       <select id="evtCategory">
@@ -369,19 +397,19 @@
     </div>
     <label style="font-size:12.5px;color:var(--ink-soft);font-weight:600;">نوع التاريخ</label>
     <div class="toggle-type" style="margin-top:6px;">
-      <button id="typeHijri" class="on">هجري</button>
-      <button id="typeGregorian">ميلادي</button>
+      <button id="typeHijri">هجري</button>
+      <button id="typeGregorian" class="on">ميلادي</button>
     </div>
-    <div class="field" id="hijriFields">
+    <div class="field" id="hijriFields" style="display:none;">
       <label>التاريخ الهجري (يوم / شهر / سنة)</label>
       <div style="display:flex;gap:8px;">
-        <input id="hDay" type="number" placeholder="يوم" min="1" max="30">
-        <input id="hMonth" type="number" placeholder="شهر" min="1" max="12">
-        <input id="hYear" type="number" placeholder="سنة" min="1300" max="1500">
+        <select id="hDay"></select>
+        <select id="hMonth"></select>
+        <select id="hYear"></select>
       </div>
       <div class="converted" id="convertedGreg"></div>
     </div>
-    <div class="field" id="gregFields" style="display:none;">
+    <div class="field" id="gregFields">
       <label>التاريخ الميلادي</label>
       <input id="gDate" type="date">
       <div class="converted" id="convertedHijri"></div>
@@ -434,23 +462,66 @@ function toDate(y,m,d){ return new Date(y, m-1, d); }
 function fmtG(y,m,d){ return `${d}/${m}/${y}م`; }
 function fmtH(y,m,d){ return `${d}/${m}/${y}هـ`; }
 
+/* Exact Umm al-Qura table for 1448 AH (official Saudi calendar), used for accurate
+   conversion within the academic year. Falls back to the tabular formula outside it. */
+const UMM_ALQURA_1448 = [
+  {m:1,  start:[2026,6,16],  days:29},
+  {m:2,  start:[2026,7,15],  days:30},
+  {m:3,  start:[2026,8,14],  days:29},
+  {m:4,  start:[2026,9,12],  days:30},
+  {m:5,  start:[2026,10,12], days:30},
+  {m:6,  start:[2026,11,11], days:29},
+  {m:7,  start:[2026,12,10], days:30},
+  {m:8,  start:[2027,1,9],   days:30},
+  {m:9,  start:[2027,2,8],   days:29},
+  {m:10, start:[2027,3,9],   days:30},
+  {m:11, start:[2027,4,8],   days:29},
+  {m:12, start:[2027,5,7],   days:30},
+];
+function hijriToGregorianExact(y,m,d){
+  if(y===1448){
+    const row = UMM_ALQURA_1448[m-1];
+    if(row && d>=1 && d<=row.days){
+      const g = new Date(row.start[0], row.start[1]-1, row.start[2]);
+      g.setDate(g.getDate() + (d-1));
+      return {year:g.getFullYear(), month:g.getMonth()+1, day:g.getDate()};
+    }
+  }
+  return hijriToGregorian(y,m,d);
+}
+function gregorianToHijriExact(y,m,d){
+  const target = new Date(y,m-1,d);
+  const tableStart = new Date(2026,5,16), tableEnd = new Date(2027,5,5);
+  if(target>=tableStart && target<=tableEnd){
+    for(const row of UMM_ALQURA_1448){
+      const s = new Date(row.start[0], row.start[1]-1, row.start[2]);
+      const e = new Date(s); e.setDate(e.getDate()+row.days-1);
+      if(target>=s && target<=e){
+        const day = Math.round((target-s)/86400000)+1;
+        return {year:1448, month:row.m, day};
+      }
+    }
+  }
+  return gregorianToHijri(y,m,d);
+}
+
 const dowNames = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 const gMonthNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
 const hMonthNames = ["محرم","صفر","ربيع الأول","ربيع الآخر","جمادى الأولى","جمادى الآخرة","رجب","شعبان","رمضان","شوال","ذو القعدة","ذو الحجة"];
 
 /* ============ Global settings ============ */
-let dateMode = localStorage.getItem('sc-dateMode') || 'hijri';
+let dateMode = localStorage.getItem('sc-dateMode') || 'gregorian';
 
 function formatDate(jsDate){
   if(dateMode==='hijri'){
-    const h = gregorianToHijri(jsDate.getFullYear(), jsDate.getMonth()+1, jsDate.getDate());
+    const h = gregorianToHijriExact(jsDate.getFullYear(), jsDate.getMonth()+1, jsDate.getDate());
     return `${dowNames[jsDate.getDay()]} ${h.day} ${hMonthNames[h.month-1]} ${h.year}هـ`;
   }
   return `${dowNames[jsDate.getDay()]} ${jsDate.getDate()} ${gMonthNames[jsDate.getMonth()]} ${jsDate.getFullYear()}م`;
 }
 function formatShort(jsDate){
   if(dateMode==='hijri'){
-    const h = gregorianToHijri(jsDate.getFullYear(), jsDate.getMonth()+1, jsDate.getDate());
+    const h = gregorianToHijriExact(jsDate.getFullYear(), jsDate.getMonth()+1, jsDate.getDate());
     return `${h.day}/${h.month}/${h.year}هـ`;
   }
   return `${jsDate.getDate()}/${jsDate.getMonth()+1}/${jsDate.getFullYear()}م`;
@@ -479,7 +550,7 @@ const catStyle = {
 const yearStart = toDate(2026,8,23); // 10/3/1448
 const TOTAL_WEEKS = 20;
 
-let events = [
+const DEFAULT_EVENTS = [
   { title:"بداية العام الدراسي", category:"مناسبات",
     start:{y:2026,m:8,d:23}, end:{y:2026,m:8,d:23},
     startH:{y:1448,m:3,d:10}, endH:{y:1448,m:3,d:10} },
@@ -493,8 +564,12 @@ let events = [
     start:{y:2027,m:1,d:8}, end:{y:2027,m:1,d:16},
     startH:{y:1448,m:7,d:30}, endH:{y:1448,m:8,d:8} },
 ];
-try{ events = events.concat(JSON.parse(localStorage.getItem('sc-events')||'[]')); }catch(e){}
-function saveUserEvents(){ localStorage.setItem('sc-events', JSON.stringify(events.slice(4))); }
+function loadEvents(){
+  try{ const raw = localStorage.getItem('sc-events-v2'); if(raw) return JSON.parse(raw); }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_EVENTS));
+}
+let events = loadEvents();
+function saveEvents(){ localStorage.setItem('sc-events-v2', JSON.stringify(events)); }
 
 let tasks = [];
 try{ tasks = JSON.parse(localStorage.getItem('sc-tasks')||'[]'); }catch(e){}
@@ -507,6 +582,8 @@ for(let i=0;i<TOTAL_WEEKS;i++){
   const e = new Date(s); e.setDate(e.getDate()+6);
   weeks.push({num:i+1, start:s, end:e});
 }
+// Academic year's final week ends 1 Sha'ban 1448 (٩/١/٢٠٢٧م) rather than a full 7-day span
+weeks[weeks.length-1].end = new Date(2027,0,9);
 const yearEnd = weeks[weeks.length-1].end;
 
 function eventDateRange(evt){ return { s: toDate(evt.start.y,evt.start.m,evt.start.d), e: toDate(evt.end.y,evt.end.m,evt.end.d) }; }
@@ -540,16 +617,17 @@ function renderCurrentWeekWidget(){
 function computeStats(){
   const total = events.length;
   const upcoming = events.filter(e=>eventDateRange(e).s >= today).length;
+  const completed = events.filter(e=>eventDateRange(e).e < today).length;
   const byCat = {}; events.forEach(e=>{ byCat[e.category]=(byCat[e.category]||0)+1; });
   const tasksDone = tasks.filter(t=>t.done).length;
-  return {total, upcoming, byCat, tasksDone, tasksTotal: tasks.length};
+  return {total, upcoming, completed, byCat, tasksDone, tasksTotal: tasks.length};
 }
 function renderStats(){
   const st = computeStats();
   const cards = [
     {label:"إجمالي الأحداث", value:st.total, icon:"📅", bg:"#e7f2ec", color:"#1f7a5c"},
     {label:"الأحداث القادمة", value:st.upcoming, icon:"⏱️", bg:"#eef1fb", color:"#7c6fe0"},
-    {label:"الإجازات", value: st.byCat["إجازات"]||0, icon:"🏖️", bg:"#fbf2e2", color:"#e0a530"},
+    {label:"الأحداث المكتملة", value: st.completed, icon:"🏁", bg:"#fbf2e2", color:"#e0a530"},
     {label:"المهام المكتملة", value: st.tasksDone, icon:"✅", bg:"#fbe9ec", color:"#e0607a"},
   ];
   document.getElementById('statsRow').innerHTML = cards.map(s=>`
@@ -568,7 +646,7 @@ function renderStats(){
 
 /* ============ Filters ============ */
 let activeCategory = 'all';
-let compactView = false;
+let weeksExpanded = false;
 
 function initFilters(){
   const sel = document.getElementById('catFilter');
@@ -576,8 +654,10 @@ function initFilters(){
     const o = document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
   });
   sel.addEventListener('change', e=>{ activeCategory=e.target.value; renderWeeks(); renderUpcoming(); });
-  document.getElementById('viewFilter').addEventListener('change', e=>{
-    compactView = e.target.value==='compact'; renderWeeks();
+  document.getElementById('showMoreWeeksBtn').addEventListener('click', ()=>{
+    weeksExpanded = !weeksExpanded;
+    document.getElementById('showMoreWeeksBtn').textContent = weeksExpanded ? '▴ عرض أقل' : '▾ عرض المزيد';
+    renderWeeks();
   });
 }
 
@@ -591,7 +671,7 @@ function weekCardHTML(w, forFull){
   const noteKey = `sc-note-${w.num}`;
   const noteVal = localStorage.getItem(noteKey) || '';
   return `
-    <div class="week-card ${isCurrent?'current':''} ${isUpcoming?'upcoming-week':''} ${compactView?'compact':''}">
+    <div class="week-card ${isCurrent?'current':''} ${isUpcoming?'upcoming-week':''}">
       ${isCurrent?'<span class="badge-current">الحالي</span>':''}
       ${isUpcoming?'<span class="badge-upcoming">القادم</span>':''}
       <div class="wc-range">📅
@@ -609,7 +689,8 @@ function weekCardHTML(w, forFull){
     </div>`;
 }
 function renderWeeks(){
-  document.getElementById('weeksPreview').innerHTML = weeks.slice(0,4).map(w=>weekCardHTML(w,false)).join('');
+  const shown = weeksExpanded ? weeks : weeks.slice(0,4);
+  document.getElementById('weeksPreview').innerHTML = shown.map(w=>weekCardHTML(w,false)).join('');
   const full = document.getElementById('allWeeksList');
   full.innerHTML = weeks.map(w=>weekCardHTML(w,true)).join('');
   full.querySelectorAll('textarea[data-week]').forEach(ta=>{
@@ -631,14 +712,26 @@ function renderUpcoming(){
   }).join('') || '<p style="font-size:13px;color:var(--gray);">لا يوجد أحداث قادمة</p>';
 }
 function renderAllEvents(){
-  const sorted = [...events].sort((a,b)=>eventDateRange(a).s - eventDateRange(b).s);
+  const sorted = events.map((e,i)=>({...e, _i:i})).sort((a,b)=>eventDateRange(a).s - eventDateRange(b).s);
   document.getElementById('allEventsList').innerHTML = sorted.map(e=>{
     const {s,e:end} = eventDateRange(e); const sameDay = s.getTime()===end.getTime();
     return `<div class="event-row"><div class="event-info">
       <div class="t"><i style="background:${catStyle[e.category].color}"></i> ${e.title} <span style="font-weight:400;color:var(--gray);font-size:11px;">(${e.category})</span></div>
-      <div class="d">${sameDay? formatEventFull(e,'start') : formatEventFull(e,'start')+' → '+formatEventFull(e,'end')}</div>
+      <div class="d">${sameDay? formatEventFull(e,'start') : formatEventFull(e,'start')+' ← '+formatEventFull(e,'end')}</div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button class="task-del" style="color:var(--green-deep);" data-edit="${e._i}">✏️</button>
+      <button class="task-del" data-del="${e._i}">🗑</button>
     </div></div>`;
   }).join('');
+  document.querySelectorAll('#allEventsList [data-edit]').forEach(b=>{
+    b.addEventListener('click', ()=> openEditEvent(+b.dataset.edit));
+  });
+  document.querySelectorAll('#allEventsList [data-del]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(confirm('هل تريد حذف هذا الحدث؟')){ events.splice(+b.dataset.del,1); saveEvents(); refreshAll(); }
+    });
+  });
 }
 
 /* ============ Categories ============ */
@@ -652,36 +745,59 @@ function renderCategories(){
   document.getElementById('catListFull').innerHTML = html;
 }
 
+const priorityLabel = {high:'عالية', medium:'متوسطة', low:'منخفضة'};
+const priorityOrder = {high:0, medium:1, low:2};
+
 /* ============ Tasks ============ */
 function renderTasks(){
   const el = document.getElementById('taskList');
   el.innerHTML = tasks.map((t,i)=>`
-    <div class="task-row ${t.done?'done':''}">
+    <div class="task-row p-${t.priority||'medium'} ${t.done?'done':''}">
       <input type="checkbox" data-i="${i}" ${t.done?'checked':''}>
       <span class="tt">${t.title}</span>
+      <span class="priority-tag priority-${t.priority||'medium'}">${priorityLabel[t.priority||'medium']}</span>
       <button class="task-del" data-del="${i}">×</button>
     </div>`).join('') || '<p style="font-size:13px;color:var(--gray);">لا توجد مهام بعد</p>';
   el.querySelectorAll('input[type=checkbox]').forEach(cb=>{
-    cb.addEventListener('change', e=>{ tasks[+e.target.dataset.i].done = e.target.checked; saveTasks(); renderTasks(); renderStats(); });
+    cb.addEventListener('change', e=>{ tasks[+e.target.dataset.i].done = e.target.checked; saveTasks(); renderTasks(); renderStats(); renderTopTasks(); });
   });
   el.querySelectorAll('[data-del]').forEach(b=>{
-    b.addEventListener('click', e=>{ tasks.splice(+e.target.dataset.del,1); saveTasks(); renderTasks(); renderStats(); });
+    b.addEventListener('click', e=>{ tasks.splice(+e.target.dataset.del,1); saveTasks(); renderTasks(); renderStats(); renderTopTasks(); });
+  });
+}
+function renderTopTasks(){
+  const el = document.getElementById('topTasksList');
+  const top = tasks
+    .map((t,i)=>({...t, _i:i}))
+    .filter(t=>!t.done)
+    .sort((a,b)=> priorityOrder[a.priority||'medium'] - priorityOrder[b.priority||'medium'])
+    .slice(0,5);
+  el.innerHTML = top.map(t=>`
+    <div class="mini-task-row p-${t.priority||'medium'}">
+      <input type="checkbox" data-i="${t._i}">
+      <span class="mtt">${t.title}</span>
+      <span class="priority-tag priority-${t.priority||'medium'}">${priorityLabel[t.priority||'medium']}</span>
+    </div>`).join('') || '<p style="font-size:13px;color:var(--gray);">لا توجد مهام غير منجزة</p>';
+  el.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', e=>{ tasks[+e.target.dataset.i].done = true; saveTasks(); renderTasks(); renderStats(); renderTopTasks(); });
   });
 }
 document.getElementById('addTaskBtn').addEventListener('click', ()=>{
   const input = document.getElementById('newTaskInput');
+  const prioritySel = document.getElementById('newTaskPriority');
   const title = input.value.trim();
   if(!title) return;
-  tasks.push({title, done:false}); saveTasks(); input.value=''; renderTasks(); renderStats();
+  tasks.push({title, done:false, priority:prioritySel.value}); saveTasks(); input.value='';
+  renderTasks(); renderStats(); renderTopTasks();
 });
 document.getElementById('newTaskInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('addTaskBtn').click(); });
 
 /* ============ Monthly calendar ============ */
 let calYear = 2026, calMonth = 8;
 function renderCalendar(){
-  const firstOfMonthH = gregorianToHijri(calYear, calMonth, 1);
+  const firstOfMonthH = gregorianToHijriExact(calYear, calMonth, 1);
   document.getElementById('calTitle').textContent = dateMode==='hijri'
-    ? `${hMonthNames[firstOfMonthH.month-1]} ${firstOfMonthH.year}هـ (تقريبي)`
+    ? `${hMonthNames[firstOfMonthH.month-1]} ${firstOfMonthH.year}هـ`
     : `${gMonthNames[calMonth-1]} ${calYear}`;
   const firstDay = new Date(calYear, calMonth-1, 1);
   const daysInMonth = new Date(calYear, calMonth, 0).getDate();
@@ -692,7 +808,7 @@ function renderCalendar(){
     const cellDate = new Date(calYear, calMonth-1, d);
     const isToday = cellDate.toDateString() === today.toDateString();
     const evs = events.filter(e=>{ const {s,e:end}=eventDateRange(e); return cellDate>=s && cellDate<=end; });
-    const dayLabel = dateMode==='hijri' ? gregorianToHijri(calYear,calMonth,d).day : d;
+    const dayLabel = dateMode==='hijri' ? gregorianToHijriExact(calYear,calMonth,d).day : d;
     const shown = evs.slice(0,2);
     const extra = evs.length - shown.length;
     html += `<div class="cal-cell ${isToday?'today':''}">
@@ -724,9 +840,19 @@ function closeSidebar(){ sidebar.classList.remove('open'); backdrop.classList.re
 sidebarTab.addEventListener('click', ()=> sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
 backdrop.addEventListener('click', closeSidebar);
 
-/* ============ Add Event modal ============ */
+/* ============ Add / Edit Event modal ============ */
 const overlay = document.getElementById('modalOverlay');
-let dateType = 'hijri';
+let dateType = 'gregorian';
+let editingIndex = null;
+
+// populate hijri day/month/year selects
+(function initHijriSelects(){
+  const dSel = document.getElementById('hDay'), mSel = document.getElementById('hMonth'), ySel = document.getElementById('hYear');
+  for(let d=1; d<=30; d++){ const o=document.createElement('option'); o.value=d; o.textContent=d; dSel.appendChild(o); }
+  hMonthNames.forEach((name,idx)=>{ const o=document.createElement('option'); o.value=idx+1; o.textContent=name; mSel.appendChild(o); });
+  for(let y=1448; y<=1470; y++){ const o=document.createElement('option'); o.value=y; o.textContent=y; ySel.appendChild(o); }
+});
+
 function setModalDateType(t){
   dateType = t;
   document.getElementById('typeHijri').classList.toggle('on', t==='hijri');
@@ -734,19 +860,50 @@ function setModalDateType(t){
   document.getElementById('hijriFields').style.display = t==='hijri' ? 'block':'none';
   document.getElementById('gregFields').style.display = t==='gregorian' ? 'block':'none';
 }
-document.getElementById('openAddEvent').addEventListener('click', ()=>{ setModalDateType(dateMode); overlay.classList.add('active'); });
+function resetModalFields(){
+  document.getElementById('evtTitle').value='';
+  document.getElementById('evtCategory').value='مناسبات';
+  document.getElementById('gDate').value='';
+  document.getElementById('hDay').value='1';
+  document.getElementById('hMonth').value='1';
+  document.getElementById('hYear').value='1448';
+  document.getElementById('convertedGreg').textContent='';
+  document.getElementById('convertedHijri').textContent='';
+}
+document.getElementById('openAddEvent').addEventListener('click', ()=>{
+  editingIndex = null;
+  document.getElementById('modalTitle').textContent = 'إضافة حدث جديد';
+  document.getElementById('saveEvent').textContent = 'حفظ الحدث';
+  resetModalFields();
+  setModalDateType(dateMode);
+  overlay.classList.add('active');
+});
+function openEditEvent(i){
+  editingIndex = i;
+  const e = events[i];
+  document.getElementById('modalTitle').textContent = 'تعديل الحدث';
+  document.getElementById('saveEvent').textContent = 'حفظ التعديلات';
+  document.getElementById('evtTitle').value = e.title;
+  document.getElementById('evtCategory').value = e.category;
+  document.getElementById('gDate').value = `${e.start.y}-${String(e.start.m).padStart(2,'0')}-${String(e.start.d).padStart(2,'0')}`;
+  document.getElementById('hDay').value = e.startH.d;
+  document.getElementById('hMonth').value = e.startH.m;
+  document.getElementById('hYear').value = e.startH.y;
+  setModalDateType(dateMode);
+  overlay.classList.add('active');
+}
 document.getElementById('cancelEvent').addEventListener('click', ()=> overlay.classList.remove('active'));
 document.getElementById('typeHijri').addEventListener('click', ()=> setModalDateType('hijri'));
 document.getElementById('typeGregorian').addEventListener('click', ()=> setModalDateType('gregorian'));
 ['hDay','hMonth','hYear'].forEach(id=>{
-  document.getElementById(id).addEventListener('input', ()=>{
+  document.getElementById(id).addEventListener('change', ()=>{
     const d=+document.getElementById('hDay').value, m=+document.getElementById('hMonth').value, y=+document.getElementById('hYear').value;
-    if(d&&m&&y){ const g = hijriToGregorian(y,m,d); document.getElementById('convertedGreg').textContent = `يوافق: ${fmtG(g.year,g.month,g.day)} (تقريبي)`; }
+    if(d&&m&&y){ const g = hijriToGregorianExact(y,m,d); document.getElementById('convertedGreg').textContent = `يوافق: ${fmtG(g.year,g.month,g.day)}`; }
   });
 });
 document.getElementById('gDate').addEventListener('input', (e)=>{
   const val = e.target.value;
-  if(val){ const [y,m,d] = val.split('-').map(Number); const h = gregorianToHijri(y,m,d); document.getElementById('convertedHijri').textContent = `يوافق: ${fmtH(h.year,h.month,h.day)} (تقريبي)`; }
+  if(val){ const [y,m,d] = val.split('-').map(Number); const h = gregorianToHijriExact(y,m,d); document.getElementById('convertedHijri').textContent = `يوافق: ${fmtH(h.year,h.month,h.day)}`; }
 });
 document.getElementById('saveEvent').addEventListener('click', ()=>{
   const title = document.getElementById('evtTitle').value.trim();
@@ -756,17 +913,18 @@ document.getElementById('saveEvent').addEventListener('click', ()=>{
   if(dateType==='hijri'){
     hD=+document.getElementById('hDay').value; hM=+document.getElementById('hMonth').value; hY=+document.getElementById('hYear').value;
     if(!hD||!hM||!hY){ alert('الرجاء إدخال التاريخ الهجري كاملًا'); return; }
-    const g = hijriToGregorian(hY,hM,hD); gY=g.year; gM=g.month; gD=g.day;
+    const g = hijriToGregorianExact(hY,hM,hD); gY=g.year; gM=g.month; gD=g.day;
   } else {
     const val = document.getElementById('gDate').value;
     if(!val){ alert('الرجاء اختيار التاريخ الميلادي'); return; }
     [gY,gM,gD] = val.split('-').map(Number);
-    const h = gregorianToHijri(gY,gM,gD); hY=h.year; hM=h.month; hD=h.day;
+    const h = gregorianToHijriExact(gY,gM,gD); hY=h.year; hM=h.month; hD=h.day;
   }
-  events.push({ title, category, start:{y:gY,m:gM,d:gD}, end:{y:gY,m:gM,d:gD}, startH:{y:hY,m:hM,d:hD}, endH:{y:hY,m:hM,d:hD} });
-  saveUserEvents();
+  const evtObj = { title, category, start:{y:gY,m:gM,d:gD}, end:{y:gY,m:gM,d:gD}, startH:{y:hY,m:hM,d:hD}, endH:{y:hY,m:hM,d:hD} };
+  if(editingIndex!==null){ events[editingIndex] = evtObj; } else { events.push(evtObj); }
+  saveEvents();
   overlay.classList.remove('active');
-  document.getElementById('evtTitle').value='';
+  editingIndex = null;
   refreshAll();
 });
 
@@ -779,10 +937,14 @@ document.getElementById('homeSearch').addEventListener('input', (e)=>{
 });
 
 /* ============ Settings: date mode, dark mode, theme color, font ============ */
-document.getElementById('dateModeSelect').value = dateMode;
-document.getElementById('dateModeSelect').addEventListener('change', e=>{
-  dateMode = e.target.value; localStorage.setItem('sc-dateMode', dateMode); refreshAll();
+const dateModeSelect = document.getElementById('dateModeSelect');
+dateModeSelect.value = dateMode;
+dateModeSelect.addEventListener('change', e=>{
+  dateMode = e.target.value;
+  localStorage.setItem('sc-dateMode', dateMode);
+  refreshAll();
 });
+
 
 const darkSwitch = document.getElementById('darkSwitch');
 function applyDark(on){
@@ -816,7 +978,7 @@ applyFont(localStorage.getItem('sc-font')||'Tajawal');
 /* ============ Init ============ */
 function refreshAll(){
   renderStats(); renderCurrentWeekWidget(); renderWeeks(); renderUpcoming();
-  renderAllEvents(); renderCategories(); renderCalendar(); renderTasks();
+  renderAllEvents(); renderCategories(); renderCalendar(); renderTasks(); renderTopTasks();
 }
 initFilters();
 refreshAll();
