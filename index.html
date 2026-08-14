@@ -129,22 +129,32 @@
   .view.active{display:block;}
 
   /* Task list */
-  .task-add{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-  .task-add input{flex:1;min-width:140px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;background:var(--paper);color:var(--ink);}
-  .task-add select{border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13px;background:var(--paper);color:var(--ink);}
+  .task-add{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .task-add input[type=text], .task-add input:not([type]){flex:1;min-width:140px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;background:var(--paper);color:var(--ink);}
+  #newTaskInput{flex:1;min-width:140px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;background:var(--paper);color:var(--ink);}
+  .task-add select, .task-add input[type=date]{border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13px;background:var(--paper);color:var(--ink);}
   .task-add button{background:var(--green-deep);color:#fff;border:none;border-radius:9px;padding:0 16px;font-weight:700;font-size:13.5px;}
+  .mini-toggle-type{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .mini-toggle-type button{border:none;background:var(--paper);padding:9px 12px;font-size:12px;font-weight:700;color:var(--ink-soft);}
+  .mini-toggle-type button.on{background:var(--green);color:#fff;}
+  #taskHijriFields{display:none;gap:6px;}
+  #taskHijriFields select{max-width:88px;}
+  .link-check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);}
+  .mini-toggle-btn{margin-right:auto;width:24px;height:24px;border-radius:50%;border:none;background:var(--green);color:#fff;font-size:15px;font-weight:800;line-height:1;}
   .priority-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;}
-  .priority-high{background:#fbe9ec;color:#c9506e;}
-  .priority-medium{background:#fbf2e2;color:#e0a530;}
-  .priority-low{background:#e9f2fb;color:#3b82c4;}
+  .priority-high{background:#fbe9e9;color:#e04d4d;}
+  .priority-medium{background:#fbf3d9;color:#d1a017;}
+  .priority-low{background:#e7f5ee;color:#2f9e5c;}
   .task-row{border-right:4px solid transparent;padding-right:10px;}
-  .task-row.p-high{border-right-color:#c9506e;}
-  .task-row.p-medium{border-right-color:#e0a530;}
-  .task-row.p-low{border-right-color:#3b82c4;}
+  .task-row.p-high{border-right-color:#e04d4d;}
+  .task-row.p-medium{border-right-color:#d1a017;}
+  .task-row.p-low{border-right-color:#2f9e5c;}
   .mini-task-row{border-right:3px solid transparent;padding-right:8px;}
-  .mini-task-row.p-high{border-right-color:#c9506e;}
-  .mini-task-row.p-medium{border-right-color:#e0a530;}
-  .mini-task-row.p-low{border-right-color:#3b82c4;}
+  .mini-task-row.p-high{border-right-color:#e04d4d;}
+  .mini-task-row.p-medium{border-right-color:#d1a017;}
+  .mini-task-row.p-low{border-right-color:#2f9e5c;}
+  .task-group-title{font-size:12.5px;font-weight:800;color:var(--ink-soft);margin:16px 0 8px;display:flex;align-items:center;gap:6px;}
+  .task-group-title:first-child{margin-top:2px;}
   .mini-task-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
   .mini-task-row:last-child{border-bottom:none;}
   .mini-task-row .mtt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -152,9 +162,9 @@
   .task-row{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);}
   .task-row:last-child{border-bottom:none;}
   .task-row input[type=checkbox]{width:18px;height:18px;}
-  .task-row.p-high input[type=checkbox]{accent-color:#c9506e;}
-  .task-row.p-medium input[type=checkbox]{accent-color:#e0a530;}
-  .task-row.p-low input[type=checkbox]{accent-color:#3b82c4;}
+  .task-row.p-high input[type=checkbox]{accent-color:#e04d4d;}
+  .task-row.p-medium input[type=checkbox]{accent-color:#d1a017;}
+  .task-row.p-low input[type=checkbox]{accent-color:#2f9e5c;}
   .task-row .tt{flex:1;font-size:13.5px;}
   .task-row.done .tt{text-decoration:line-through;color:var(--gray);}
   .task-del{background:none;border:none;color:var(--rose);font-size:16px;}
@@ -275,7 +285,7 @@
             <div id="catList"></div>
           </div>
           <div class="side-card">
-            <h3 class="section-title">✅ أهم المهام</h3>
+            <h3 class="section-title">✅ أهم المهام <button class="mini-toggle-btn" id="quickAddTaskBtn" title="إضافة مهمة">+</button></h3>
             <div id="topTasksList"></div>
             <a href="#" class="see-all" data-view-jump="tasks">عرض كل المهام</a>
           </div>
@@ -299,13 +309,24 @@
     <section class="view" data-view="tasks">
       <h3 class="section-title">✅ قائمة المهام</h3>
       <div class="side-card">
-        <div class="task-add">
+        <div class="task-add" id="taskAddForm">
           <input id="newTaskInput" placeholder="أضف مهمة جديدة...">
           <select id="newTaskPriority">
             <option value="high">أولوية عالية</option>
             <option value="medium" selected>أولوية متوسطة</option>
             <option value="low">أولوية منخفضة</option>
           </select>
+          <div class="mini-toggle-type" id="taskDateType">
+            <button data-t="gregorian" class="on">ميلادي</button>
+            <button data-t="hijri">هجري</button>
+          </div>
+          <input id="newTaskDateG" type="date" title="تاريخ ميلادي اختياري">
+          <span id="taskHijriFields" style="display:none;gap:6px;">
+            <select id="taskHDay"></select>
+            <select id="taskHMonth"></select>
+            <select id="taskHYear"></select>
+          </span>
+          <label class="link-check"><input type="checkbox" id="newTaskLink"> ربطها كحدث ضمن فئة المهام</label>
           <button id="addTaskBtn">إضافة</button>
         </div>
         <div id="taskList"></div>
@@ -647,6 +668,7 @@ function renderStats(){
 /* ============ Filters ============ */
 let activeCategory = 'all';
 let weeksExpanded = false;
+let searchQuery = '';
 
 function initFilters(){
   const sel = document.getElementById('catFilter');
@@ -668,6 +690,7 @@ function weekCardHTML(w, forFull){
   const isUpcoming = !isCurrent && ((idx===-1 && w.num===1) || (idx>=0 && w.num===idx+2));
   let evs = eventsInRange(w.start, w.end);
   if(activeCategory!=='all') evs = evs.filter(e=>e.category===activeCategory);
+  if(searchQuery) evs = evs.filter(e=>e.title.includes(searchQuery));
   const noteKey = `sc-note-${w.num}`;
   const noteVal = localStorage.getItem(noteKey) || '';
   return `
@@ -688,9 +711,19 @@ function weekCardHTML(w, forFull){
       <div class="wc-week"><div class="lbl">الأسبوع</div><div class="n">${w.num}</div></div>
     </div>`;
 }
+function weekHasMatch(w){
+  let evs = eventsInRange(w.start, w.end);
+  if(activeCategory!=='all') evs = evs.filter(e=>e.category===activeCategory);
+  if(searchQuery) evs = evs.filter(e=>e.title.includes(searchQuery));
+  return evs.length>0;
+}
 function renderWeeks(){
-  const shown = weeksExpanded ? weeks : weeks.slice(0,4);
-  document.getElementById('weeksPreview').innerHTML = shown.map(w=>weekCardHTML(w,false)).join('');
+  const filtering = activeCategory!=='all' || searchQuery;
+  let pool = filtering ? weeks.filter(weekHasMatch) : weeks;
+  const shown = weeksExpanded ? pool : pool.slice(0,4);
+  document.getElementById('weeksPreview').innerHTML = shown.length
+    ? shown.map(w=>weekCardHTML(w,false)).join('')
+    : '<p style="font-size:13px;color:var(--gray);">لا توجد أسابيع مطابقة</p>';
   const full = document.getElementById('allWeeksList');
   full.innerHTML = weeks.map(w=>weekCardHTML(w,true)).join('');
   full.querySelectorAll('textarea[data-week]').forEach(ta=>{
@@ -715,9 +748,23 @@ function renderAllEvents(){
   const sorted = events.map((e,i)=>({...e, _i:i})).sort((a,b)=>eventDateRange(a).s - eventDateRange(b).s);
   document.getElementById('allEventsList').innerHTML = sorted.map(e=>{
     const {s,e:end} = eventDateRange(e); const sameDay = s.getTime()===end.getTime();
+    let statusText, statusColor;
+    if(end < today){
+      const daysAgo = Math.round((today-end)/86400000);
+      statusText = daysAgo===0 ? 'انتهى اليوم' : `انتهى منذ ${daysAgo} ${daysAgo===1?'يوم':'أيام'}`;
+      statusColor = 'var(--gray)';
+    } else if(s <= today && today <= end){
+      statusText = 'جارٍ الآن';
+      statusColor = 'var(--green)';
+    } else {
+      const daysLeft = Math.ceil((s-today)/86400000);
+      statusText = `متبقي ${daysLeft} ${daysLeft===1?'يوم':'أيام'}`;
+      statusColor = 'var(--amber)';
+    }
     return `<div class="event-row"><div class="event-info">
       <div class="t"><i style="background:${catStyle[e.category].color}"></i> ${e.title} <span style="font-weight:400;color:var(--gray);font-size:11px;">(${e.category})</span></div>
       <div class="d">${sameDay? formatEventFull(e,'start') : formatEventFull(e,'start')+' ← '+formatEventFull(e,'end')}</div>
+      <div class="d" style="color:${statusColor};font-weight:700;">${statusText}</div>
     </div>
     <div style="display:flex;gap:6px;">
       <button class="task-del" style="color:var(--green-deep);" data-edit="${e._i}">✏️</button>
@@ -746,23 +793,43 @@ function renderCategories(){
 }
 
 const priorityLabel = {high:'عالية', medium:'متوسطة', low:'منخفضة'};
+const priorityIcon = {high:'🔴', medium:'🟡', low:'🟢'};
 const priorityOrder = {high:0, medium:1, low:2};
 
 /* ============ Tasks ============ */
-function renderTasks(){
-  const el = document.getElementById('taskList');
-  el.innerHTML = tasks.map((t,i)=>`
-    <div class="task-row p-${t.priority||'medium'} ${t.done?'done':''}">
+function taskRowHTML(t,i){
+  let dateStr = '';
+  if(dateMode==='hijri' && t.dateH) dateStr = `<span style="font-size:10.5px;color:var(--gray);">${t.dateH.d}/${t.dateH.m}/${t.dateH.y}هـ</span>`;
+  else if(t.date) dateStr = `<span style="font-size:10.5px;color:var(--gray);">${t.date.d}/${t.date.m}/${t.date.y}م</span>`;
+  return `<div class="task-row p-${t.priority||'medium'} ${t.done?'done':''}">
       <input type="checkbox" data-i="${i}" ${t.done?'checked':''}>
       <span class="tt">${t.title}</span>
+      ${dateStr}
       <span class="priority-tag priority-${t.priority||'medium'}">${priorityLabel[t.priority||'medium']}</span>
       <button class="task-del" data-del="${i}">×</button>
-    </div>`).join('') || '<p style="font-size:13px;color:var(--gray);">لا توجد مهام بعد</p>';
+    </div>`;
+}
+function renderTasks(){
+  const el = document.getElementById('taskList');
+  const groups = ['high','medium','low'];
+  let html = '';
+  groups.forEach(p=>{
+    const items = tasks.map((t,i)=>({...t,_i:i})).filter(t=>(t.priority||'medium')===p);
+    if(!items.length) return;
+    html += `<div class="task-group-title">${priorityIcon[p]} أولوية ${priorityLabel[p]} (${items.length})</div>`;
+    html += items.map(t=> taskRowHTML(t, t._i)).join('');
+  });
+  el.innerHTML = html || '<p style="font-size:13px;color:var(--gray);">لا توجد مهام مضافة</p>';
   el.querySelectorAll('input[type=checkbox]').forEach(cb=>{
     cb.addEventListener('change', e=>{ tasks[+e.target.dataset.i].done = e.target.checked; saveTasks(); renderTasks(); renderStats(); renderTopTasks(); });
   });
   el.querySelectorAll('[data-del]').forEach(b=>{
-    b.addEventListener('click', e=>{ tasks.splice(+e.target.dataset.del,1); saveTasks(); renderTasks(); renderStats(); renderTopTasks(); });
+    b.addEventListener('click', e=>{
+      const i = +b.dataset.del;
+      const t = tasks[i];
+      if(t.linkedId){ events = events.filter(e=>e.taskId!==t.linkedId); saveEvents(); }
+      tasks.splice(i,1); saveTasks(); refreshAll();
+    });
   });
 }
 function renderTopTasks(){
@@ -777,18 +844,56 @@ function renderTopTasks(){
       <input type="checkbox" data-i="${t._i}">
       <span class="mtt">${t.title}</span>
       <span class="priority-tag priority-${t.priority||'medium'}">${priorityLabel[t.priority||'medium']}</span>
-    </div>`).join('') || '<p style="font-size:13px;color:var(--gray);">لا توجد مهام غير منجزة</p>';
+    </div>`).join('') || '<p style="font-size:13px;color:var(--gray);">لا توجد مهام مضافة</p>';
   el.querySelectorAll('input[type=checkbox]').forEach(cb=>{
     cb.addEventListener('change', e=>{ tasks[+e.target.dataset.i].done = true; saveTasks(); renderTasks(); renderStats(); renderTopTasks(); });
   });
 }
+let taskDateType = 'gregorian';
+document.querySelectorAll('#taskDateType button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    taskDateType = btn.dataset.t;
+    document.querySelectorAll('#taskDateType button').forEach(b=> b.classList.toggle('on', b.dataset.t===taskDateType));
+    document.getElementById('newTaskDateG').style.display = taskDateType==='gregorian' ? 'inline-block':'none';
+    document.getElementById('taskHijriFields').style.display = taskDateType==='hijri' ? 'inline-flex':'none';
+  });
+});
+document.getElementById('quickAddTaskBtn').addEventListener('click', ()=>{
+  switchView('tasks');
+  setTimeout(()=> document.getElementById('newTaskInput').focus(), 50);
+});
 document.getElementById('addTaskBtn').addEventListener('click', ()=>{
   const input = document.getElementById('newTaskInput');
   const prioritySel = document.getElementById('newTaskPriority');
+  const linkCheck = document.getElementById('newTaskLink');
   const title = input.value.trim();
   if(!title) return;
-  tasks.push({title, done:false, priority:prioritySel.value}); saveTasks(); input.value='';
-  renderTasks(); renderStats(); renderTopTasks();
+  let date = null, dateH = null;
+  if(taskDateType==='gregorian'){
+    const dateInput = document.getElementById('newTaskDateG');
+    if(dateInput.value){
+      const [y,m,d] = dateInput.value.split('-').map(Number); date = {y,m,d};
+      const h = gregorianToHijriExact(y,m,d); dateH = {y:h.year,m:h.month,d:h.day};
+    }
+  } else {
+    const hd = +document.getElementById('taskHDay').value, hm = +document.getElementById('taskHMonth').value, hy = +document.getElementById('taskHYear').value;
+    if(hd && hm && hy){
+      dateH = {y:hy,m:hm,d:hd};
+      const g = hijriToGregorianExact(hy,hm,hd); date = {y:g.year,m:g.month,d:g.day};
+    }
+  }
+  const task = {title, done:false, priority:prioritySel.value, date, dateH};
+  if(linkCheck.checked && date){
+    const taskId = 't'+Date.now();
+    task.linkedId = taskId;
+    events.push({ title, category:'مهام', taskId,
+      start:date, end:date, startH:dateH, endH:dateH });
+    saveEvents();
+  }
+  tasks.push(task); saveTasks();
+  input.value=''; document.getElementById('newTaskDateG').value='';
+  linkCheck.checked=false; prioritySel.value='medium';
+  refreshAll();
 });
 document.getElementById('newTaskInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('addTaskBtn').click(); });
 
@@ -845,13 +950,13 @@ const overlay = document.getElementById('modalOverlay');
 let dateType = 'gregorian';
 let editingIndex = null;
 
-// populate hijri day/month/year selects
-(function initHijriSelects(){
-  const dSel = document.getElementById('hDay'), mSel = document.getElementById('hMonth'), ySel = document.getElementById('hYear');
+function populateHijriSelects(dSel, mSel, ySel){
   for(let d=1; d<=30; d++){ const o=document.createElement('option'); o.value=d; o.textContent=d; dSel.appendChild(o); }
   hMonthNames.forEach((name,idx)=>{ const o=document.createElement('option'); o.value=idx+1; o.textContent=name; mSel.appendChild(o); });
   for(let y=1448; y<=1470; y++){ const o=document.createElement('option'); o.value=y; o.textContent=y; ySel.appendChild(o); }
-});
+}
+populateHijriSelects(document.getElementById('hDay'), document.getElementById('hMonth'), document.getElementById('hYear'));
+populateHijriSelects(document.getElementById('taskHDay'), document.getElementById('taskHMonth'), document.getElementById('taskHYear'));
 
 function setModalDateType(t){
   dateType = t;
@@ -930,10 +1035,11 @@ document.getElementById('saveEvent').addEventListener('click', ()=>{
 
 /* ============ Home search ============ */
 document.getElementById('homeSearch').addEventListener('input', (e)=>{
-  const q = e.target.value.trim();
+  searchQuery = e.target.value.trim();
   document.querySelectorAll('#upcomingList .event-row').forEach(r=>{
-    r.style.display = r.querySelector('.t').textContent.includes(q) ? 'flex' : 'none';
+    r.style.display = r.querySelector('.t').textContent.includes(searchQuery) ? 'flex' : 'none';
   });
+  renderWeeks();
 });
 
 /* ============ Settings: date mode, dark mode, theme color, font ============ */
